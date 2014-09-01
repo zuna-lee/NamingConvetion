@@ -1,7 +1,9 @@
 package zuna.refactoring.ui.actions;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -14,7 +16,6 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 
 import zuna.model.MyClass;
-import zuna.model.MyMethod;
 import zuna.refactoring.ProjectAnalyzer;
 
 @SuppressWarnings("restriction")
@@ -36,6 +37,7 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 
+	@SuppressWarnings("null")
 	@Override
 	public void run(IAction action) {
 
@@ -51,64 +53,164 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				IProject project = (IProject) ((IAdaptable) firstElement).getAdapter(IProject.class);
 				ProjectAnalyzer.firstElement = (IAdaptable) firstElement;
 				ProjectAnalyzer.analyze(project);
-				//
+				// 163 239 200 132
 
-				HashMap<String, MyClass> classList = ProjectAnalyzer.project.getClassList();
+				Set<String> classListSet1 = ProjectAnalyzer.project.getClassList().keySet();
+				Set<String> classListSet2 = ProjectAnalyzer.project.getClassList().keySet();
 
-				for (String key : classList.keySet()) {
-					String category = null;
-					if (ProjectAnalyzer.project.getClass(key).getUseClasses().size() != 0
-							&& ProjectAnalyzer.project.getClass(key).getUsedClasses().size() != 0) {
-						category = "control";
-					} else if (ProjectAnalyzer.project.getClass(key).getUseClasses().size() == 0
-							&& ProjectAnalyzer.project.getClass(key).getUsedClasses().size() != 0) {
-						category = "entity";
-					} else if (ProjectAnalyzer.project.getClass(key).getUseClasses().size() != 0
-							&& ProjectAnalyzer.project.getClass(key).getUsedClasses().size() == 0) {
-						category = "boundary";
-					}
+				for (String key1 : classListSet1) {
+					// HashSet<MyClass> useClass1 =
+					// ProjectAnalyzer.project.getClass(key1).getUseClasses();
+					// HashSet<MyClass> usedClass1 =
+					// ProjectAnalyzer.project.getClass(key1).getUsedClasses();
 
-					System.out.println("Class name:" + key.substring(key.lastIndexOf(".") + 1) + " isAbastract:"
-							+ ProjectAnalyzer.project.getClass(key).isAbstract() + " isInterface:"
-							+ ProjectAnalyzer.project.getClass(key).isInterface() + " noOfCalls:"
-							+ ProjectAnalyzer.project.getClass(key).getNoOfCalls() + " Category:" + category);
+					MyClass parentClass1 = ProjectAnalyzer.project.getClass(key1).getSuperClass();
+					ArrayList<MyClass> childClass1 = ProjectAnalyzer.project.getClass(key1).getChildClasses();
 
-					System.out.println("============Child Classes============");
-					for (int i = 0; i < ProjectAnalyzer.project.getClass(key).getChildClasses().size(); i++) {
-						System.out.println(ProjectAnalyzer.project.getClass(key).getChildClasses().get(i).getID());
-					}
+					for (String key2 : classListSet2) {
 
-					System.out.println("============Parent Class=============");
-					if (ProjectAnalyzer.project.getClass(key).getSuperClass() != null) {
-						System.out.println(ProjectAnalyzer.project.getClass(key).getSuperClass().getID());
-					}
-					System.out.println("=========Implemented Classes=========");
-					for (int i = 0; i < ProjectAnalyzer.project.getClass(key).getImplementedClasses().size(); i++) {
-						System.out.println(ProjectAnalyzer.project.getClass(key).getImplementedClasses().get(i).getID());
-					}
-					System.out.println("=============Interfaces=============");
-					for (int i = 0; i < ProjectAnalyzer.project.getClass(key).getInterface().size(); i++) {
-						System.out.println(ProjectAnalyzer.project.getClass(key).getInterface().get(i).getID());
-					}
-					System.out.println("============Uses Classes============");
-					for (Iterator<MyClass> iter = ProjectAnalyzer.project.getClass(key).getUseClasses().iterator(); iter
-							.hasNext();) {
-						System.out.println(iter.next().getID());
-					}
-					System.out.println("============Used Classes============");
-					for (Iterator<MyClass> iter = ProjectAnalyzer.project.getClass(key).getUsedClasses().iterator(); iter
-							.hasNext();) {
-						System.out.println(iter.next().getID());
-					}
+						// HashSet<MyClass> useClass2 =
+						// ProjectAnalyzer.project.getClass(key2).getUseClasses();
+						// HashSet<MyClass> usedClass2 =
+						// ProjectAnalyzer.project.getClass(key2).getUsedClasses();
+						// HashSet<MyClass> useUnionXY = new
+						// HashSet<MyClass>(useClass1);
+						// useUnionXY.addAll(useClass2);
+						// HashSet<MyClass> useIntersectionXY = new
+						// HashSet<MyClass>(useClass1);
+						// useIntersectionXY.retainAll(useClass2);
+						// HashSet<MyClass> usedUnionXY = new
+						// HashSet<MyClass>(usedClass1);
+						// usedUnionXY.addAll(usedClass2);
+						// HashSet<MyClass> usedIntersectionXY = new
+						// HashSet<MyClass>(usedClass1);
+						// usedIntersectionXY.retainAll(usedClass2);
+						// double oSim = (double) useIntersectionXY.size() /
+						// (double) useUnionXY.size();
+						// if (useClass1.size() == 0 && useClass2.size() == 0) {
+						// oSim = 0.0;
+						// }
+						// double iSim = (double) usedIntersectionXY.size() /
+						// (double) usedUnionXY.size();
+						// if (usedClass1.size() == 0 && usedClass2.size() == 0)
+						// {
+						// iSim = 0.0;
+						// }
+						// double rAvg = (oSim + iSim) / 2;
 
-					System.out.println();
+						MyClass parentClass2 = ProjectAnalyzer.project.getClass(key2).getSuperClass();
+						int pSim = 0;
+						if (parentClass1 == parentClass2) {
+							pSim = 1;
+						}
 
+						ArrayList<MyClass> childClass2 = ProjectAnalyzer.project.getClass(key2).getChildClasses();
+
+						HashSet<MyClass> childUnionXY = new HashSet<MyClass>(childClass1);
+						childUnionXY.addAll(childClass2);
+						HashSet<MyClass> childIntersectionXY = new HashSet<MyClass>(childClass1);
+						childIntersectionXY.retainAll(childClass2);
+						double cSim = (double) childIntersectionXY.size() / (double) childUnionXY.size();
+						if (childClass1.size() == 0 && childClass2.size() == 0) {
+							cSim = 0.0;
+						}
+						double hAvg = ((double) pSim + cSim) / 2;
+
+						System.out.println(ProjectAnalyzer.project.getClass(key1).getID() + " : "
+								+ ProjectAnalyzer.project.getClass(key2).getID() + "//////// child sim: " + cSim + " parent sim:"
+								+ pSim + " avg: " + hAvg);
+
+					}
 				}
 
-				HashMap<String, MyMethod> methodList = ProjectAnalyzer.project.getMethodList();
+				//
+				//
+				// for (String key : classList.keySet()) {
+				//
 
-				System.out.println("Class:" + classList.size() + " Method:" + methodList.size());
-				System.out.println();
+				// //
+				// String category = null;
+				// if
+				// (ProjectAnalyzer.project.getClass(key).getUseClasses().size()
+				// != 0
+				// &&
+				// ProjectAnalyzer.project.getClass(key).getUsedClasses().size()
+				// != 0) {
+				// category = "control";
+				// } else if
+				// (ProjectAnalyzer.project.getClass(key).getUseClasses().size()
+				// == 0
+				// &&
+				// ProjectAnalyzer.project.getClass(key).getUsedClasses().size()
+				// != 0) {
+				// category = "entity";
+				// } else if
+				// (ProjectAnalyzer.project.getClass(key).getUseClasses().size()
+				// != 0
+				// &&
+				// ProjectAnalyzer.project.getClass(key).getUsedClasses().size()
+				// == 0) {
+				// category = "boundary";
+				// }
+				//
+				// System.out.println("Class name:" +
+				// key.substring(key.lastIndexOf(".") + 1) + " isAbastract:"
+				// + ProjectAnalyzer.project.getClass(key).isAbstract() +
+				// " isInterface:"
+				// + ProjectAnalyzer.project.getClass(key).isInterface() +
+				// " noOfCalls:"
+				// + ProjectAnalyzer.project.getClass(key).getNoOfCalls() +
+				// " Category:" + category);
+				//
+				// System.out.println("============Child Classes============");
+				// for (int i = 0; i <
+				// ProjectAnalyzer.project.getClass(key).getChildClasses().size();
+				// i++) {
+				// System.out.println(ProjectAnalyzer.project.getClass(key).getChildClasses().get(i).getID());
+				// }
+				//
+				// System.out.println("============Parent Class=============");
+				// if (ProjectAnalyzer.project.getClass(key).getSuperClass() !=
+				// null) {
+				// System.out.println(ProjectAnalyzer.project.getClass(key).getSuperClass().getID());
+				// }
+				// System.out.println("=========Implemented Classes=========");
+				// for (int i = 0; i <
+				// ProjectAnalyzer.project.getClass(key).getImplementedClasses().size();
+				// i++) {
+				// System.out.println(ProjectAnalyzer.project.getClass(key).getImplementedClasses().get(i).getID());
+				// }
+				// System.out.println("=============Interfaces=============");
+				// for (int i = 0; i <
+				// ProjectAnalyzer.project.getClass(key).getInterface().size();
+				// i++) {
+				// System.out.println(ProjectAnalyzer.project.getClass(key).getInterface().get(i).getID());
+				// }
+				// System.out.println("============Uses Classes============");
+				// for (Iterator<MyClass> iter =
+				// ProjectAnalyzer.project.getClass(key).getUseClasses().iterator();
+				// iter
+				// .hasNext();) {
+				// System.out.println(iter.next().getID());
+				// }
+				// System.out.println("============Used Classes============");
+				// for (Iterator<MyClass> iter =
+				// ProjectAnalyzer.project.getClass(key).getUsedClasses().iterator();
+				// iter
+				// .hasNext();) {
+				// System.out.println(iter.next().getID());
+				// }
+				//
+				// System.out.println();
+
+				// }
+
+				// HashMap<String, MyMethod> methodList =
+				// ProjectAnalyzer.project.getMethodList();
+				//
+				// System.out.println("Class:" + classList.size() + " Method:" +
+				// methodList.size());
+				// System.out.println();
 
 			} catch (java.lang.NullPointerException e) {
 				e.printStackTrace();

@@ -45,7 +45,7 @@ public abstract class Element implements Serializable{
 	}
 
 	public String getID() {
-		return ID.substring(ID.lastIndexOf(".")+1);
+		return ID;
 	}
 	
 	public void display() {
