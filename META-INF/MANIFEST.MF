@@ -4,7 +4,8 @@ Bundle-Name: NamingConvetion
 Bundle-SymbolicName: NamingConvetion;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .,
- lib/tml-cmm-3.2.jar
+ lib/tml-cmm-3.2.jar,
+ lib/intt.jar
 Bundle-Activator: zuna.refactoring.ui.Activator
 Export-Package: zuna.refactoring.ui,
  tml,
@@ -16,6 +17,7 @@ Export-Package: zuna.refactoring.ui,
  tml.storage.importers,
  tml.utils,
  tml.vectorspace,
+ uk.ac.open.crc.intt,
  zuna.Repository,
  zuna.clustering,
  zuna.clustering.HAC,

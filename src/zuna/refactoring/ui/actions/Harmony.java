@@ -15,6 +15,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 
+import uk.ac.open.crc.intt.IdentifierNameTokeniser;
+import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
+import weka.core.tokenizers.Tokenizer;
 import zuna.model.MyClass;
 import zuna.refactoring.ProjectAnalyzer;
 import zuna.util.NameTokenizer;
@@ -57,7 +60,7 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				//
 
 				Set<String> classList = ProjectAnalyzer.project.getClassList().keySet();
-				
+
 				for (String key : classList) {
 
 					String className = ProjectAnalyzer.project.getClass(key).getID();
@@ -74,10 +77,18 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 					if (className.contains(".")) {
 						className = className.substring(className.lastIndexOf(".") + 1);
 					}
-					
-					String[] token = NameTokenizer.tokenizer(className);
 
-					System.out.println(className + ": " + token + isAbstract + isInterface + isImplemented + fanIn + fanOut);
+					String[] tokens = NameTokenizer.tokenizer(className);
+					System.out.print(className + ": ");
+					for (int i = 0; i < tokens.length; i++) {
+						System.out.print(tokens[i]);
+						if (i < tokens.length - 1) {
+							System.out.print(" ");
+						}
+					}
+					System.out.println(" " + isAbstract + isInterface + isImplemented + fanIn + fanOut);
+					// System.out.println(isAbstract + isInterface +
+					// isImplemented + fanIn + fanOut);
 
 				}
 
