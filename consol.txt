@@ -1,0 +1,22 @@
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
+!SESSION 2014-09-02 23:28:22.437 -----------------------------------------------
+eclipse.buildId=4.4.0.I20140606-1215
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=ko_KR
+Framework arguments:  -product org.eclipse.platform.ide
+Command-line arguments:  -product org.eclipse.platform.ide -data /Users/leehongseok/Documents/workspace2/../runtime-EclipseApplication -dev file:/Users/leehongseok/Documents/workspace2/.metadata/.plugins/org.eclipse.pde.core/Eclipse Application/dev.properties -os macosx -ws cocoa -arch x86_64 -consoleLog
+
+!ENTRY org.eclipse.core.net 1 0 2014-09-02 23:28:31.939
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+hierarchy.Parent3: 00000
+hierarchy.Child4: 00000
+ROOT: 00000
+java.lang.Object: 00000
+hierarchy.child3: 00000
+hierarchy.Child2: 00000
+hierarchy.Parent1: 00000
+hierarchy.Child1: 00000
+hierarchy.Parent2: 00000
+***WARNING: Display must be created on main thread due to Cocoa restrictions.
+***WARNING: Display must be created on main thread due to Cocoa restrictions.

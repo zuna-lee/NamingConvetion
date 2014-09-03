@@ -17,6 +17,7 @@ import org.eclipse.ui.PlatformUI;
 
 import zuna.model.MyClass;
 import zuna.refactoring.ProjectAnalyzer;
+import zuna.util.NameTokenizer;
 
 @SuppressWarnings("restriction")
 public class Harmony implements IWorkbenchWindowActionDelegate {
@@ -53,75 +54,135 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				IProject project = (IProject) ((IAdaptable) firstElement).getAdapter(IProject.class);
 				ProjectAnalyzer.firstElement = (IAdaptable) firstElement;
 				ProjectAnalyzer.analyze(project);
-				// 163 239 200 132
+				//
 
-				Set<String> classListSet1 = ProjectAnalyzer.project.getClassList().keySet();
-				Set<String> classListSet2 = ProjectAnalyzer.project.getClassList().keySet();
+				Set<String> classList = ProjectAnalyzer.project.getClassList().keySet();
+				NameTokenizer nameTokenizer = new NameTokenizer();
+				for (String key : classList) {
 
-				for (String key1 : classListSet1) {
-					// HashSet<MyClass> useClass1 =
-					// ProjectAnalyzer.project.getClass(key1).getUseClasses();
-					// HashSet<MyClass> usedClass1 =
-					// ProjectAnalyzer.project.getClass(key1).getUsedClasses();
+					String className = ProjectAnalyzer.project.getClass(key).getID();
 
-					MyClass parentClass1 = ProjectAnalyzer.project.getClass(key1).getSuperClass();
-					ArrayList<MyClass> childClass1 = ProjectAnalyzer.project.getClass(key1).getChildClasses();
+					int isAbstract = ProjectAnalyzer.project.getClass(key).isAbstract() ? 1 : 0;
+					int isInterface = ProjectAnalyzer.project.getClass(key).isInterface() ? 1 : 0;
+					int isImplemented = ProjectAnalyzer.project.getClass(key).getInterface().size() != 0 ? 1 : 0;
+					int fanIn = ProjectAnalyzer.project.getClass(key).getUsedClasses().size() != 0 ? 1 : 0;
+					int fanOut = ProjectAnalyzer.project.getClass(key).getUseClasses().size() != 0 ? 1 : 0;
 
-					for (String key2 : classListSet2) {
-
-						// HashSet<MyClass> useClass2 =
-						// ProjectAnalyzer.project.getClass(key2).getUseClasses();
-						// HashSet<MyClass> usedClass2 =
-						// ProjectAnalyzer.project.getClass(key2).getUsedClasses();
-						// HashSet<MyClass> useUnionXY = new
-						// HashSet<MyClass>(useClass1);
-						// useUnionXY.addAll(useClass2);
-						// HashSet<MyClass> useIntersectionXY = new
-						// HashSet<MyClass>(useClass1);
-						// useIntersectionXY.retainAll(useClass2);
-						// HashSet<MyClass> usedUnionXY = new
-						// HashSet<MyClass>(usedClass1);
-						// usedUnionXY.addAll(usedClass2);
-						// HashSet<MyClass> usedIntersectionXY = new
-						// HashSet<MyClass>(usedClass1);
-						// usedIntersectionXY.retainAll(usedClass2);
-						// double oSim = (double) useIntersectionXY.size() /
-						// (double) useUnionXY.size();
-						// if (useClass1.size() == 0 && useClass2.size() == 0) {
-						// oSim = 0.0;
-						// }
-						// double iSim = (double) usedIntersectionXY.size() /
-						// (double) usedUnionXY.size();
-						// if (usedClass1.size() == 0 && usedClass2.size() == 0)
-						// {
-						// iSim = 0.0;
-						// }
-						// double rAvg = (oSim + iSim) / 2;
-
-						MyClass parentClass2 = ProjectAnalyzer.project.getClass(key2).getSuperClass();
-						int pSim = 0;
-						if (parentClass1 == parentClass2) {
-							pSim = 1;
-						}
-
-						ArrayList<MyClass> childClass2 = ProjectAnalyzer.project.getClass(key2).getChildClasses();
-
-						HashSet<MyClass> childUnionXY = new HashSet<MyClass>(childClass1);
-						childUnionXY.addAll(childClass2);
-						HashSet<MyClass> childIntersectionXY = new HashSet<MyClass>(childClass1);
-						childIntersectionXY.retainAll(childClass2);
-						double cSim = (double) childIntersectionXY.size() / (double) childUnionXY.size();
-						if (childClass1.size() == 0 && childClass2.size() == 0) {
-							cSim = 0.0;
-						}
-						double hAvg = ((double) pSim + cSim) / 2;
-
-						System.out.println(ProjectAnalyzer.project.getClass(key1).getID() + " : "
-								+ ProjectAnalyzer.project.getClass(key2).getID() + "//////// child sim: " + cSim + " parent sim:"
-								+ pSim + " avg: " + hAvg);
-
+					if (className.endsWith(">")) {
+						className = className.substring(0, className.indexOf("<"));
 					}
+					if (className.contains(".")) {
+						className = className.substring(className.lastIndexOf(".") + 1);
+					}
+					
+					String[] token = nameTokenizer.tokenizer(className);
+
+					System.out.println(className + ": " + token + isAbstract + isInterface + isImplemented + fanIn + fanOut);
+
 				}
+
+				// Set<String> classListSet1 =
+				// ProjectAnalyzer.project.getClassList().keySet();
+				// Set<String> classListSet2 =
+				// ProjectAnalyzer.project.getClassList().keySet();
+
+				// for (String key1 : classListSet1) {
+				// HashSet<MyClass> useClass1 =
+				// ProjectAnalyzer.project.getClass(key1).getUseClasses();
+				// HashSet<MyClass> usedClass1 =
+				// ProjectAnalyzer.project.getClass(key1).getUsedClasses();
+				//
+				// MyClass parentClass1 =
+				// ProjectAnalyzer.project.getClass(key1).getSuperClass();
+				// ArrayList<MyClass> childClass1 =
+				// ProjectAnalyzer.project.getClass(key1).getChildClasses();
+				//
+				// ArrayList<Boolean> constraints1 = new ArrayList<Boolean>();
+				// constraints1.add(ProjectAnalyzer.project.getClass(key1).isAbstract());
+				// constraints1.add(ProjectAnalyzer.project.getClass(key1).isEnumuration());
+				// constraints1.add(ProjectAnalyzer.project.getClass(key1).isInterface());
+				//
+				// for (String key2 : classListSet2) {
+				// // ///////////////////////////////////// Relationship
+				// // similarity
+				// HashSet<MyClass> useClass2 =
+				// ProjectAnalyzer.project.getClass(key2).getUseClasses();
+				// HashSet<MyClass> usedClass2 =
+				// ProjectAnalyzer.project.getClass(key2).getUsedClasses();
+				// HashSet<MyClass> useUnionXY = new
+				// HashSet<MyClass>(useClass1);
+				// useUnionXY.addAll(useClass2);
+				// HashSet<MyClass> useIntersectionXY = new
+				// HashSet<MyClass>(useClass1);
+				// useIntersectionXY.retainAll(useClass2);
+				// HashSet<MyClass> usedUnionXY = new
+				// HashSet<MyClass>(usedClass1);
+				// usedUnionXY.addAll(usedClass2);
+				// HashSet<MyClass> usedIntersectionXY = new
+				// HashSet<MyClass>(usedClass1);
+				// usedIntersectionXY.retainAll(usedClass2);
+				// double oSim = (double) useIntersectionXY.size() / (double)
+				// useUnionXY.size();
+				// if (useClass1.size() == 0 && useClass2.size() == 0) {
+				// oSim = 0.0;
+				// }
+				// double iSim = (double) usedIntersectionXY.size() / (double)
+				// usedUnionXY.size();
+				// if (usedClass1.size() == 0 && usedClass2.size() == 0) {
+				// iSim = 0.0;
+				// }
+				// double rAvg = (oSim + iSim) / 2;
+				//
+				// // /////////////////////////////////////// Hierachy
+				// // similarity
+				// MyClass parentClass2 =
+				// ProjectAnalyzer.project.getClass(key2).getSuperClass();
+				// int pSim = 0;
+				// if (parentClass1 == parentClass2) {
+				// pSim = 1;
+				// }
+				//
+				// ArrayList<MyClass> childClass2 =
+				// ProjectAnalyzer.project.getClass(key2).getChildClasses();
+				//
+				// HashSet<MyClass> childUnionXY = new
+				// HashSet<MyClass>(childClass1);
+				// childUnionXY.addAll(childClass2);
+				// HashSet<MyClass> childIntersectionXY = new
+				// HashSet<MyClass>(childClass1);
+				// childIntersectionXY.retainAll(childClass2);
+				// double cSim = (double) childIntersectionXY.size() / (double)
+				// childUnionXY.size();
+				// if (childClass1.size() == 0 && childClass2.size() == 0) {
+				// cSim = 0.0;
+				// }
+				// double hAvg = ((double) pSim + cSim) / 2d;
+				//
+				// // ///////////////////////////////////// Constraint
+				// // similarity
+				// ArrayList<Boolean> constraints2 = new ArrayList<Boolean>();
+				// constraints2.add(ProjectAnalyzer.project.getClass(key2).isAbstract());
+				// constraints2.add(ProjectAnalyzer.project.getClass(key2).isEnumuration());
+				// constraints2.add(ProjectAnalyzer.project.getClass(key2).isInterface());
+				// double conSim = 0;
+				// for (int i = 0; i < constraints1.size(); i++) {
+				//
+				// if (constraints1.get(i) == constraints2.get(i)) {
+				// conSim++;
+				// }
+				//
+				// }
+				// if (conSim != 0) {
+				// conSim = conSim / 3d;
+				// }
+				//
+				// System.out.println(ProjectAnalyzer.project.getClass(key1).getID()
+				// + " : "
+				// + ProjectAnalyzer.project.getClass(key2).getID() +
+				// "//////// conSim: " + conSim);
+				//
+				// }
+				// }
 
 				//
 				//
@@ -204,13 +265,6 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				// System.out.println();
 
 				// }
-
-				// HashMap<String, MyMethod> methodList =
-				// ProjectAnalyzer.project.getMethodList();
-				//
-				// System.out.println("Class:" + classList.size() + " Method:" +
-				// methodList.size());
-				// System.out.println();
 
 			} catch (java.lang.NullPointerException e) {
 				e.printStackTrace();
