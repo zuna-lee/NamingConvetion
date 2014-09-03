@@ -18,6 +18,5 @@
 	<classpathentry kind="lib" path="lib/svnkit-1.7.11.jar"/>
 	<classpathentry kind="lib" path="lib/swtgraphics2d.jar"/>
 	<classpathentry kind="lib" path="lib/tml-cmm-3.2.jar"/>
-	<classpathentry kind="lib" path="src/zuna/util/intt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

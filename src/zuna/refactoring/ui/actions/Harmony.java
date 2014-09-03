@@ -57,7 +57,7 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				//
 
 				Set<String> classList = ProjectAnalyzer.project.getClassList().keySet();
-				NameTokenizer nameTokenizer = new NameTokenizer();
+				
 				for (String key : classList) {
 
 					String className = ProjectAnalyzer.project.getClass(key).getID();
@@ -75,7 +75,7 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 						className = className.substring(className.lastIndexOf(".") + 1);
 					}
 					
-					String[] token = nameTokenizer.tokenizer(className);
+					String[] token = NameTokenizer.tokenizer(className);
 
 					System.out.println(className + ": " + token + isAbstract + isInterface + isImplemented + fanIn + fanOut);
 
