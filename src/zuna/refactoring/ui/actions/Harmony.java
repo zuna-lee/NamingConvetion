@@ -1,8 +1,5 @@
 package zuna.refactoring.ui.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -15,12 +12,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 
-import uk.ac.open.crc.intt.IdentifierNameTokeniser;
-import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
-import weka.core.tokenizers.Tokenizer;
-import zuna.model.MyClass;
 import zuna.refactoring.ProjectAnalyzer;
 import zuna.util.NameTokenizer;
+import zuna.util.TFIDFCalculator;
 
 @SuppressWarnings("restriction")
 public class Harmony implements IWorkbenchWindowActionDelegate {
@@ -62,9 +56,20 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 				Set<String> classList = ProjectAnalyzer.project.getClassList().keySet();
 
 				for (String key : classList) {
-
 					String className = ProjectAnalyzer.project.getClass(key).getID();
 
+					// /////// TF-IDF //////
+
+					// System.out.println("================" + className +
+					// "================");
+					// for (String string :
+					// TFIDFCalculator.TfIdfCal(key).keySet()) {
+					// System.out.println(string + ": " +
+					// TFIDFCalculator.TfIdfCal(key).get(string));
+					//
+					// }
+
+					// //////////////// relation //////////////////
 					int isAbstract = ProjectAnalyzer.project.getClass(key).isAbstract() ? 1 : 0;
 					int isInterface = ProjectAnalyzer.project.getClass(key).isInterface() ? 1 : 0;
 					int isImplemented = ProjectAnalyzer.project.getClass(key).getInterface().size() != 0 ? 1 : 0;
@@ -79,16 +84,42 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 					}
 
 					String[] tokens = NameTokenizer.tokenizer(className);
-					System.out.print(className + ": ");
-					for (int i = 0; i < tokens.length; i++) {
-						System.out.print(tokens[i]);
-						if (i < tokens.length - 1) {
-							System.out.print(" ");
-						}
+					String[] fixes = new String[2];
+					System.out.print("" + isAbstract + isInterface + isImplemented + fanIn + fanOut + ",");
+					// for (int i = 0; i < tokens.length; i++) {
+					// System.out.print(tokens[i]);
+					// if (i < tokens.length - 1) {
+					// System.out.print(" ");
+					// }
+					// }
+
+					if (tokens[0].equals("Action") || tokens[0].equals("Event") || tokens[0].equals("Input")
+							|| tokens[0].equals("Output") || tokens[0].equals("I") || tokens[0].equals("Abstract")
+							|| tokens[0].equals("Factory") || tokens[0].equals("Util") || tokens[0].equals("Handle")
+							|| tokens[0].equals("Manager") || tokens[0].equals("Object") || tokens[0].equals("Impl")
+							|| tokens[0].endsWith("er") || tokens[0].endsWith("or")) {
+						fixes[0] = tokens[0];
+					} else if (tokens[0].startsWith("I") && Character.isUpperCase(tokens[0].charAt(1))) {
+						fixes[0] = "I";
+
+					} else {
+						fixes[0] = " ";
+
 					}
-					System.out.println(" " + isAbstract + isInterface + isImplemented + fanIn + fanOut);
-					// System.out.println(isAbstract + isInterface +
-					// isImplemented + fanIn + fanOut);
+					if (tokens[tokens.length - 1].equals("Action") || tokens[tokens.length - 1].equals("Event")
+							|| tokens[tokens.length - 1].equals("Input") || tokens[tokens.length - 1].equals("Output")
+							|| tokens[tokens.length - 1].equals("I") || tokens[tokens.length - 1].equals("Abstract")
+							|| tokens[tokens.length - 1].equals("Factory") || tokens[tokens.length - 1].equals("Util")
+							|| tokens[tokens.length - 1].equals("Handle") || tokens[tokens.length - 1].equals("Manager")
+							|| tokens[tokens.length - 1].equals("Object") || tokens[tokens.length - 1].equals("Impl")
+							|| tokens[tokens.length - 1].endsWith("er") || tokens[tokens.length - 1].endsWith("or")) {
+						fixes[1] = tokens[tokens.length - 1];
+					} else {
+						fixes[1] = " ";
+					}
+					System.out.print(fixes[0] + "," + fixes[1] + "," + className);
+
+					System.out.println();
 
 				}
 
