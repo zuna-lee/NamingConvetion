@@ -96,12 +96,17 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 					if (tokens[0].equals("Action") || tokens[0].equals("Event") || tokens[0].equals("Input")
 							|| tokens[0].equals("Output") || tokens[0].equals("I") || tokens[0].equals("Abstract")
 							|| tokens[0].equals("Factory") || tokens[0].equals("Util") || tokens[0].equals("Handle")
-							|| tokens[0].equals("Manager") || tokens[0].equals("Object") || tokens[0].equals("Impl")
-							|| tokens[0].endsWith("er") || tokens[0].endsWith("or")) {
+							|| tokens[0].equals("Manager") || tokens[0].equals("Object") || tokens[0].equals("Impl")) {
 						fixes[0] = tokens[0];
 					} else if (tokens[0].startsWith("I") && Character.isUpperCase(tokens[0].charAt(1))) {
 						fixes[0] = "I";
 
+					} else if (tokens[0].endsWith("er")) {
+						fixes[0] = "er";
+					} else if (tokens[0].endsWith("or")) {
+						fixes[0] = "or";
+					} else if (tokens[0].endsWith("ing")) {
+						fixes[0] = "ing";
 					} else {
 						fixes[0] = " ";
 
@@ -111,9 +116,14 @@ public class Harmony implements IWorkbenchWindowActionDelegate {
 							|| tokens[tokens.length - 1].equals("I") || tokens[tokens.length - 1].equals("Abstract")
 							|| tokens[tokens.length - 1].equals("Factory") || tokens[tokens.length - 1].equals("Util")
 							|| tokens[tokens.length - 1].equals("Handle") || tokens[tokens.length - 1].equals("Manager")
-							|| tokens[tokens.length - 1].equals("Object") || tokens[tokens.length - 1].equals("Impl")
-							|| tokens[tokens.length - 1].endsWith("er") || tokens[tokens.length - 1].endsWith("or")) {
+							|| tokens[tokens.length - 1].equals("Object") || tokens[tokens.length - 1].equals("Impl")) {
 						fixes[1] = tokens[tokens.length - 1];
+					} else if (tokens[tokens.length - 1].endsWith("er")) {
+						fixes[1] = "er";
+					} else if (tokens[tokens.length - 1].endsWith("or")) {
+						fixes[1] = "or";
+					} else if (tokens[tokens.length - 1].endsWith("ing")) {
+						fixes[1] = "ing";
 					} else {
 						fixes[1] = " ";
 					}
